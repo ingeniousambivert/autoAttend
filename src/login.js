@@ -2,13 +2,15 @@
 /* eslint-disable no-console */
 
 const fs = require('fs');
+
 const credentials = require('../config/credentials.json');
 
 const USERNAME_SELECTOR = '#username';
 const PASSWORD_SELECTOR = '#password';
 const CTA_SELECTOR = '#loginbtn';
 
-async function LoginMagic(page, login, location) {
+async function LoginMagic(page, login) {
+  const directory = '../user_data/';
   await page.goto(login, {
     waitUntil: 'load',
     timeout: 0,
@@ -25,10 +27,10 @@ async function LoginMagic(page, login, location) {
 
   const cookies = await page.cookies();
 
-  if (!fs.existsSync(location)) {
-    fs.mkdirSync(location);
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory);
 
-    fs.writeFile(location, JSON.stringify(cookies, null, 2), (err) => {
+    fs.writeFile(`${directory}moodle-session.json`, JSON.stringify(cookies, null, 2), (err) => {
       if (err) throw err;
     });
     console.log('Success: Written cookies');

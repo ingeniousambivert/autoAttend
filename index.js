@@ -3,6 +3,7 @@
 /* eslint-disable no-undef */
 
 const puppeteer = require('puppeteer');
+const path = require('path');
 
 const LoginMagic = require('./src/login.js');
 const NavigationMagic = require('./src/navigation.js');
@@ -11,10 +12,7 @@ const ScrapeMagic = require('./src/scrape.js');
 const LOGIN_URL = 'http://glsufcait.org/moodle/login/index.php';
 const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
 
-const USER_DATA = './user_data/moodle-session.js';
-const SCRAPED_DATA = './scraped_data/data.js';
-
-(async (puppeteerInstance, loginUrl, forumUrl, sessionLocation, dataLocation) => {
+(async (puppeteerInstance, loginUrl, forumUrl) => {
   const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
   const page = await browser.newPage();
 
@@ -23,11 +21,12 @@ const SCRAPED_DATA = './scraped_data/data.js';
   });
 
   try {
-    // if (cookies === null) {
-    await LoginMagic(page, loginUrl, sessionLocation);
-    // }
+    if (!path.existsSync('./user_data/moodle-session.json')) {
+      await LoginMagic(page, loginUrl);
+    }
+
     await NavigationMagic(page, forumUrl);
-    await ScrapeMagic(page, dataLocation).then((data) => {
+    await ScrapeMagic(page).then((data) => {
       console.log('Data', data);
     });
     browser.close();
@@ -35,4 +34,4 @@ const SCRAPED_DATA = './scraped_data/data.js';
   } catch (error) {
     console.log(error);
   }
-})(puppeteer, LOGIN_URL, OR_FORUM_URL, USER_DATA, SCRAPED_DATA);
+})(puppeteer, LOGIN_URL, OR_FORUM_URL);
