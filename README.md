@@ -1,5 +1,5 @@
 # autoAttend
-Automation for meeting attendance.
+Automation for meeting attendance using [Puppeteer](https://pptr.dev/)
 
 
 ## Installation
