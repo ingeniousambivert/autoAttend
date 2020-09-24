@@ -1,0 +1,13 @@
+[
+  {
+    "name": "MoodleSession",
+    "value": "l6hff4p6j91j41cc3n66cp59b7",
+    "domain": "glsufcait.org",
+    "path": "/moodle/",
+    "expires": -1,
+    "size": 39,
+    "httpOnly": false,
+    "secure": false,
+    "session": true
+  }
+]
