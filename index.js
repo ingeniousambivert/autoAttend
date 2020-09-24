@@ -3,7 +3,7 @@
 /* eslint-disable no-undef */
 
 const puppeteer = require('puppeteer');
-const fs = require('fs');
+const fse = require('fs-extra');
 
 const LoginMagic = require('./src/login.js');
 const NavigationMagic = require('./src/navigation.js');
@@ -34,4 +34,4 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
   } catch (error) {
     console.log(error);
   }
-})(puppeteer, LOGIN_URL, OR_FORUM_URL, fs);
+})(puppeteer, LOGIN_URL, OR_FORUM_URL, fse);

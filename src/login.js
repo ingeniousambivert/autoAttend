@@ -7,8 +7,7 @@ const USERNAME_SELECTOR = '#username';
 const PASSWORD_SELECTOR = '#password';
 const CTA_SELECTOR = '#loginbtn';
 
-async function LoginMagic(page, login, fs) {
-  const directory = '../user_data/';
+async function LoginMagic(page, login, fse) {
   await page.goto(login, {
     waitUntil: 'load',
     timeout: 0,
@@ -25,13 +24,17 @@ async function LoginMagic(page, login, fs) {
 
   const cookies = await page.cookies();
 
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory);
-
-    fs.writeFile(`${directory}moodle-session.json`, JSON.stringify(cookies, null, 2), (err) => {
-      if (err) throw err;
+  if (!fse.pathExists('../user_data/')) {
+    fse.ensureDirSync('../user_data/', (err) => {
+      console.log(err);
     });
-    console.log('Success: Written cookies');
+    fse.writeJson('../user_data/moodle-session.json', cookies)
+      .then(() => {
+        console.log('Success: Written cookies');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 }
 

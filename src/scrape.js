@@ -2,24 +2,22 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 
-async function ScrapeMagic(page, fs) {
-  const directory = '../scraped_data/';
+async function ScrapeMagic(page, fse) {
+  let data = '';
 
   const result = await page.evaluate(() => {
-    const data = document.querySelector('div.forumpost.clearfix.lastpost.firstpost.starter').innerText;
-
-    // if (!fs.existsSync(directory)) {
-    //   fs.mkdirSync(directory);
-
-    //   fs.writeFile(`${directory}data.json`, JSON.stringify(data, null, 2), (err) => {
-    //     if (err) throw err;
-    //   });
-    // }
-
+    data = document.querySelector('div.forumpost.clearfix.lastpost.firstpost.starter').innerText;
     return data;
   });
 
-  console.log('Success: Scraped Data');
+  //   fse.writeJsonSync('../scraped_data/data.json', data)
+  //     .then(() => {
+  //       console.log('Success: Scraped Data');
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+
   return result;
 }
 
