@@ -24,11 +24,12 @@ async function LoginMagic(page, login, fse) {
 
   const cookies = await page.cookies();
 
-  if (!fse.pathExists('../user_data/')) {
-    fse.ensureDirSync('../user_data/', (err) => {
+  if (!fse.pathExists('./user_data/')) {
+    fse.ensureDirSync('./user_data/', (err) => {
       console.log(err);
     });
-    fse.writeJson('../user_data/moodle-session.json', cookies)
+  } else {
+    fse.writeJson('./user_data/moodle-session.json', cookies)
       .then(() => {
         console.log('Success: Written cookies');
       })

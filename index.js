@@ -4,13 +4,32 @@
 
 const puppeteer = require('puppeteer');
 const fse = require('fs-extra');
+const path = require('path');
 
 const LoginMagic = require('./src/login.js');
 const NavigationMagic = require('./src/navigation.js');
 const ScrapeMagic = require('./src/scrape.js');
 
+const dataDir = path.join(__dirname, '/data');
+
 const LOGIN_URL = 'http://glsufcait.org/moodle/login/index.php';
 const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
+
+// function WriteToJSON(data) {
+//   if (!fse.pathExists(dataDir)) {
+//     fse.ensureDirSync(dataDir, (err) => {
+//       console.log(err);
+//     });
+//   } else {
+//     fse.writeJson(`${dataDir}/scraped_data.json`, data)
+//       .then(() => {
+//         console.log('Success: Scraped Data');
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
+//   }
+// }
 
 (async (puppeteerInstance, loginUrl, forumUrl, fileStream) => {
   const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
