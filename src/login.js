@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 const fs = require('fs');
+const credentials = require('../config/credentials.json');
 
 const USERNAME_SELECTOR = '#username';
 const PASSWORD_SELECTOR = '#password';
@@ -13,10 +14,10 @@ async function LoginMagic(page, login) {
   });
 
   await page.click(USERNAME_SELECTOR);
-  await page.keyboard.type(process.env.USERNAME);
+  await page.keyboard.type(credentials.username);
 
   await page.click(PASSWORD_SELECTOR);
-  await page.keyboard.type(process.env.PASSWORD);
+  await page.keyboard.type(credentials.password);
 
   await page.click(CTA_SELECTOR);
   console.log('Success: Log in');

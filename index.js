@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-require('dotenv').config();
+
 const puppeteer = require('puppeteer');
 
 const LoginMagic = require('./src/login.js');
