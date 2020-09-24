@@ -43,11 +43,9 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
     // if (!fs.statSync('./user_data/moodle-session.json')) {
     await LoginMagic(page, loginUrl, fileStream);
     // }
-
     await NavigationMagic(page, forumUrl, fileStream);
-    await ScrapeMagic(page).then((data) => {
-      console.log('Data', data);
-    });
+    await ScrapeMagic(page).then((link) => { console.log('Link: ', link); });
+
     browser.close();
     process.exit(0);
   } catch (error) {

@@ -7,8 +7,15 @@ async function ScrapeMagic(page) {
     const data = document.querySelector('div.forumpost.clearfix.lastpost.firstpost.starter').innerText;
     return data;
   });
-
-  return result;
+  const splitData = result.split('\n');
+  let link = '';
+  splitData.map((word) => {
+    if (word.match(/^https/)) {
+      link = word;
+    }
+    return link;
+  });
+  return link;
 }
 
 module.exports = ScrapeMagic;
