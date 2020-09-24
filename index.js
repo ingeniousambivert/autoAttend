@@ -15,7 +15,7 @@ const USER_DATA = './user_data/moodle-session.js';
 const SCRAPED_DATA = './scraped_data/data.js';
 
 (async (puppeteerInstance, loginUrl, forumUrl, sessionLocation, dataLocation) => {
-  const browser = await puppeteerInstance.launch({ headless: false, userDataDir: '../user_data' });
+  const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
   const page = await browser.newPage();
 
   process.on('unhandledRejection', (reason, p) => {

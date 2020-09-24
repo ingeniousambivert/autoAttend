@@ -8,13 +8,13 @@ async function ScrapeMagic(page, location) {
   const result = await page.evaluate(() => {
     const data = document.querySelector('div.forumpost.clearfix.lastpost.firstpost.starter').innerText;
 
-    //   if (!fs.existsSync(location)) {
-    //     fs.mkdirSync(location);
+    if (!fs.existsSync(location)) {
+      fs.mkdirSync(location);
 
-    // fs.writeFile('./scraped_data/data.json', JSON.stringify(data, null, 2), (err) => {
-    //   if (err) throw err;
-    // });
-    //   }
+      fs.writeFile('./scraped_data/data.json', JSON.stringify(data, null, 2), (err) => {
+        if (err) throw err;
+      });
+    }
 
     return data;
   });
