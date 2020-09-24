@@ -34,6 +34,7 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
 (async (puppeteerInstance, loginUrl, forumUrl, fileStream) => {
   const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
   const page = await browser.newPage();
+  let goto = '';
 
   process.on('unhandledRejection', (reason, p) => {
     console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -44,7 +45,12 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
     await LoginMagic(page, loginUrl, fileStream);
     // }
     await NavigationMagic(page, forumUrl, fileStream);
-    await ScrapeMagic(page).then((link) => { console.log('Link: ', link); });
+    await ScrapeMagic(page).then((link) => { console.log('Link: ', link); goto = link; });
+    await page.goto(goto, {
+      waitUntil: 'load',
+      timeout: 0,
+    });
+    await page.screenshot({ path: 'page.png' });
 
     browser.close();
     process.exit(0);
