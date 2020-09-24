@@ -4,53 +4,29 @@
 
 const puppeteer = require('puppeteer');
 const fse = require('fs-extra');
-const path = require('path');
 
-const LoginMagic = require('./src/login.js');
-const NavigationMagic = require('./src/navigation.js');
-const ScrapeMagic = require('./src/scrape.js');
-
-const dataDir = path.join(__dirname, '/data');
+const LoginMagic = require('./lib/login.js');
+const NavigationMagic = require('./lib/navigation.js');
+const ScrapeMagic = require('./lib/scrape.js');
+const MeetingMagic = require('./lib/meeting.js');
 
 const LOGIN_URL = 'http://glsufcait.org/moodle/login/index.php';
 const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
 
-// function WriteToJSON(data) {
-//   if (!fse.pathExists(dataDir)) {
-//     fse.ensureDirSync(dataDir, (err) => {
-//       console.log(err);
-//     });
-//   } else {
-//     fse.writeJson(`${dataDir}/scraped_data.json`, data)
-//       .then(() => {
-//         console.log('Success: Scraped Data');
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//       });
-//   }
-// }
-
 (async (puppeteerInstance, loginUrl, forumUrl, fileStream) => {
   const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
   const page = await browser.newPage();
-  let goto = '';
+  let gotoMeeting = '';
 
   process.on('unhandledRejection', (reason, p) => {
     console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
   });
 
   try {
-    // if (!fs.statSync('./user_data/moodle-session.json')) {
     await LoginMagic(page, loginUrl, fileStream);
-    // }
     await NavigationMagic(page, forumUrl, fileStream);
-    await ScrapeMagic(page).then((link) => { console.log('Link: ', link); goto = link; });
-    await page.goto(goto, {
-      waitUntil: 'load',
-      timeout: 0,
-    });
-    await page.screenshot({ path: 'page.png' });
+    await ScrapeMagic(page).then((link) => { gotoMeeting = link; });
+    await MeetingMagic(page, gotoMeeting);
 
     browser.close();
     process.exit(0);
