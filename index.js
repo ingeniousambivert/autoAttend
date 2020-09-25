@@ -3,7 +3,6 @@
 /* eslint-disable no-undef */
 
 const puppeteer = require('puppeteer');
-const fse = require('fs-extra');
 
 const LoginMagic = require('./lib/login.js');
 const NavigationMagic = require('./lib/navigation.js');
@@ -13,8 +12,8 @@ const MeetingMagic = require('./lib/meeting.js');
 const LOGIN_URL = 'http://glsufcait.org/moodle/login/index.php';
 const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
 
-(async (puppeteerInstance, loginUrl, forumUrl, fileStream) => {
-  const browser = await puppeteerInstance.launch({ headless: false, userDataDir: './user_data' });
+(async (puppeteerInstance, loginUrl, forumUrl) => {
+  const browser = await puppeteerInstance.launch({ headless: true });
   const page = await browser.newPage();
   let gotoMeeting = '';
 
@@ -23,8 +22,8 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
   });
 
   try {
-    await LoginMagic(page, loginUrl, fileStream);
-    await NavigationMagic(page, forumUrl, fileStream);
+    await LoginMagic(page, loginUrl);
+    await NavigationMagic(page, forumUrl);
     await ScrapeMagic(page).then((link) => { gotoMeeting = link; });
     await MeetingMagic(page, gotoMeeting);
 
@@ -33,4 +32,4 @@ const OR_FORUM_URL = 'http://glsufcait.org/moodle/mod/forum/discuss.php?d=102';
   } catch (error) {
     console.log(error);
   }
-})(puppeteer, LOGIN_URL, OR_FORUM_URL, fse);
+})(puppeteer, LOGIN_URL, OR_FORUM_URL);
